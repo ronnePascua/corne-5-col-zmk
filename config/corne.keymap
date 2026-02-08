@@ -1,0 +1,131 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/pointing.h>
+
+#define DEFAULT_L 0
+#define SYMBOLS_L 1
+#define ARROWS_L  2
+#define NUMBERS_L 3
+
+/ {
+    chosen { zmk,matrix_transform = &five_column_transform; };
+
+    behaviors {
+        hm: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS";
+            #binding-cells = <2>;
+            tapping-term-ms = <300>;
+            quick-tap-ms = <200>;
+            flavor = "balanced";
+            bindings = <&kp>, <&kp>;
+
+            require-prior-idle-ms = <125>;
+        };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+
+        grave {
+            bindings = <&kp GRAVE>;
+            key-positions = <27 28>;
+        };
+
+        quote {
+            bindings = <&kp SQT>;
+            key-positions = <26 27>;
+        };
+    };
+
+    macros {
+        m0: m0 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&none &kp LS(N) &kp O &kp K &kp U &kp L &kp O &kp S &kp QMARK &kp N6 &kp N2 &kp ENTER>;
+            label = "M0";
+        };
+
+        m1: m1 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&none &kp LS(T) &kp U &kp D &kp I &kp L &kp O &kp H &kp U &kp F &kp DLLR &kp N4 &kp N9 &kp ENTER>;
+            label = "M1";
+        };
+
+        m2: m2 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&none &kp B &kp E &kp R &kp O &kp X &kp MINUS &kp F &kp O &kp O &kp MINUS &kp N9 &kp N0 &kp N1 &kp N7 &kp RET>;
+            label = "M2";
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        base {
+            label = "0";
+            bindings = <
+  &kp Q           &kp W           &kp E               &kp R             &kp T          &kp Y              &kp U              &kp I                    &kp O              &kp P
+  &kp A           &kp S           &kp D               &kp F             &kp G          &kp H              &kp J              &kp K                    &kp L              &kp SEMI
+  &hm LEFT_GUI Z  &hm LEFT_ALT X  &hm LEFT_CONTROL C  &hm LEFT_SHIFT V  &kp B          &hm RIGHT_SHIFT N  &hm RIGHT_SHIFT M  &hm RIGHT_CONTROL COMMA  &hm RIGHT_ALT DOT  &hm RIGHT_GUI FSLH
+                                  &kp ESC             &lt 2 TAB         &lt 3 ENTER    &lt 4 SPACE        &lt 1 BACKSPACE    &kp DEL
+            >;
+        };
+
+        nav {
+            bindings = <
+  &none     &none     &none      &none      &none    &kp HOME        &kp PAGE_DOWN   &kp PAGE_UP   &kp END          &none
+  &kp LGUI  &kp LALT  &kp LCTRL  &kp LSHFT  &none    &kp LEFT        &kp DOWN        &kp UP        &kp RIGHT        &kp SCROLLLOCK
+  &none     &none     &none      &none      &none    &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &kp KP_NUMLOCK
+                      &none      &mo 5      &none    &none           &none           &none
+            >;
+        };
+
+        number {
+            bindings = <
+  &none  &kp N1  &kp N2  &kp N3  &kp N0    &none  &none      &none      &none     &none
+  &none  &kp N4  &kp N5  &kp N6  &none     &none  &kp RSHFT  &kp RCTRL  &kp RALT  &kp RGUI
+  &none  &kp N7  &kp N8  &kp N9  &none     &none  &none      &none      &none     &none
+                 &none   &none   &none     &none  &mo 5      &none
+            >;
+        };
+
+        symbol {
+            bindings = <
+  &none     &none     &none      &none      &none    &none          &none         &kp LS(LPAR)  &kp LS(RPAR)  &kp LS(PIPE)
+  &kp LGUI  &kp LALT  &kp LCTRL  &kp LSHFT  &none    &kp LS(UNDER)  &kp LS(PLUS)  &kp LS(LBRC)  &kp LS(RBRC)  &kp BSLH
+  &none     &none     &none      &none      &none    &kp MINUS      &kp EQUAL     &kp LBKT      &kp RBKT      &none
+                      &none      &none      &none    &none          &none         &none
+            >;
+        };
+
+        fn {
+            bindings = <
+  &none  &kp F1  &kp F2  &kp F3  &kp F10    &none  &none      &none      &none     &none
+  &none  &kp F4  &kp F5  &kp F6  &kp F11    &none  &kp RSHFT  &kp RCTRL  &kp RALT  &kp RGUI
+  &none  &kp F7  &kp F8  &kp F9  &kp F12    &none  &none      &none      &none     &none
+                 &none   &none   &none      &none  &none      &none
+            >;
+        };
+
+        macro {
+            bindings = <
+  &m0  &none  &none  &none  &none    &none  &none       &none       &none  &none
+  &m1  &none  &none  &none  &none    &none  &bt BT_PRV  &bt BT_NXT  &none  &bt BT_CLR
+  &m2  &none  &none  &none  &none    &none  &none       &none       &none  &none
+              &none  &none  &none    &none  &none       &none
+            >;
+        };
+    };
+
+    conditional_layers { compatible = "zmk,conditional-layers"; };
+};
